@@ -1,6 +1,6 @@
-# OAIHarvester2
+# oai-harvester2
 
-The OAIHarvester2 Open Source Software (OSS) project is a Java application that provides an OAI-PMH harvester framework.
+The oai-harvester2 Open Source Software (OSS) project is a Java application that provides an OAI-PMH harvester framework.
 
 This is a copy of the [original OAIHarvester2](http://www.oclc.org/research/activities/oaiharvester2.html) with some changes:
 -   Build system changed to maven
