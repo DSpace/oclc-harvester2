@@ -1,12 +1,20 @@
-# oai-harvester2
+# org.dspace:oclc-harvester2
 
-The oai-harvester2 Open Source Software (OSS) project is a Java application that provides an OAI-PMH harvester framework.
+The oclc-harvester2 Open Source Software (OSS) project is a Java application that provides an OAI-PMH harvester framework.
 
-This is a copy of the [original OAIHarvester2](http://www.oclc.org/research/activities/oaiharvester2.html) with some changes:
--   Build system changed to maven
--   Remove all dependencies and use only Java API from JRE.
--   clean up sources (ThreadLocal, StringBuilder instead of StringBuffer, Slf4j logger, etc.)
--   Rewrite all tests to use new junit and fix test URLs.
+This codebase is adapted to DSpace, based on two prior projects:
+* https://github.com/OCLC-Research/oaiharvester2/ - The original codebase, built by OCLC under Apache 2.0 license
+* https://github.com/sasund/oai-harvester2 - A fork/update of that OCLC codebase to adapt it to Maven build process and update dependencies to use only Java API from JRE.
+
+This codebase is a fork of https://github.com/sasund/oai-harvester2, and adapts that project more directly to DSpace.  Minor updates have been made to the codebase to ensure the tests utilize the DSpace demo server and ensure the entire project can be released to Maven Central (as `org.dspace:oclc-harvester2`)
 
 ### Maven repository
-There is no public maven repository with this bundle. You have to build and deploy it to your maven repository.
+https://search.maven.org/artifact/org.dspace/oclc-harvester2
+
+```
+<dependency>
+  <groupId>org.dspace</groupId>
+  <artifactId>oclc-harvester2</artifactId>
+   <version>1.0.0</version>
+</dependency>
+```
