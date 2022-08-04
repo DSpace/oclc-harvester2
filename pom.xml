@@ -91,7 +91,8 @@
                 <version>3.8.1</version>
                 <configuration>
                     <!-- Require Java 8 or above -->
-                    <release>8</release>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
