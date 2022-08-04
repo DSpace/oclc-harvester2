@@ -20,11 +20,14 @@ public class ListIdentifiersTest {
 
     @Test
     public void testv11() throws Exception {
-        ListIdentifiers listIdentifiers = new ListIdentifiers(OAI11_TEST_URL, null, null, null, "oai_dc");
-        assertTrue(ListIdentifiers.SCHEMA_LOCATION_V1_1_LIST_IDENTIFIERS.equals(listIdentifiers.getSchemaLocation()));
-        String resumptionToken = listIdentifiers.getResumptionToken();
-        System.out.println("resumptionToken=" + resumptionToken);
-        assertTrue(resumptionToken.equals("!!!!100"));
+        if (OAI11_TEST_URL != null && !OAI11_TEST_URL.isEmpty()) {
+            ListIdentifiers listIdentifiers = new ListIdentifiers(OAI11_TEST_URL, null, null, null, "oai_dc");
+            assertTrue(
+                ListIdentifiers.SCHEMA_LOCATION_V1_1_LIST_IDENTIFIERS.equals(listIdentifiers.getSchemaLocation()));
+            String resumptionToken = listIdentifiers.getResumptionToken();
+            //System.out.println("resumptionToken=" + resumptionToken);
+            assertTrue(resumptionToken.equals("!!!!100"));
+        }
     }
 
     @Test
@@ -32,7 +35,7 @@ public class ListIdentifiersTest {
         ListIdentifiers listIdentifiers = new ListIdentifiers(OAI2_TEST_URL, null, null, null, "oai_dc");
         assertTrue(ListIdentifiers.SCHEMA_LOCATION_V2_0.equals(listIdentifiers.getSchemaLocation()));
         String resumptionToken = listIdentifiers.getResumptionToken();
-        System.out.println("resumptionToken=" + resumptionToken);
-        assertTrue(resumptionToken.startsWith("metadataPrefix"));
+        //System.out.println("resumptionToken=" + resumptionToken);
+        assertTrue(resumptionToken.equals("oai_dc////100"));
     }
 }

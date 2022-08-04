@@ -21,8 +21,10 @@ public class IdentifyTest {
 
     @Test
     public void test11() throws Exception {
-        Identify identify = new Identify(OAI11_TEST_URL);
-        assertTrue("1.1".equals(identify.getProtocolVersion()));
+        if (OAI11_TEST_URL != null && !OAI11_TEST_URL.isEmpty()) {
+            Identify identify = new Identify(OAI11_TEST_URL);
+            assertTrue("1.1".equals(identify.getProtocolVersion()));
+        }
     }
 
     @Test

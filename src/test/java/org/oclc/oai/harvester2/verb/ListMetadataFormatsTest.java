@@ -20,8 +20,10 @@ public class ListMetadataFormatsTest {
 
     @Test
     public void test11() throws Exception {
-        ListMetadataFormats listMetadataFormats = new ListMetadataFormats(OAI11_TEST_URL, "oai:VTETD:etd-3345131939761081");
-        assertTrue(ListMetadataFormats.SCHEMA_LOCATION_V1_1_LIST_METADATA_FORMATS.equals(listMetadataFormats.getSchemaLocation()));
+        if (OAI11_TEST_URL != null && !OAI11_TEST_URL.isEmpty()) {
+            ListMetadataFormats listMetadataFormats = new ListMetadataFormats(OAI11_TEST_URL, "oai:VTETD:etd-3345131939761081");
+            assertTrue(ListMetadataFormats.SCHEMA_LOCATION_V1_1_LIST_METADATA_FORMATS.equals(listMetadataFormats.getSchemaLocation()));
+        }
     }
 
     @Test

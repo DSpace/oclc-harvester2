@@ -20,11 +20,13 @@ public class ListRecordsTest {
 
     @Test
     public void testv11() throws Exception {
-        ListRecords listRecords = new ListRecords(OAI11_TEST_URL, null, null, null, "oai_dc");
-        assertTrue(ListRecords.SCHEMA_LOCATION_V1_1_LIST_RECORDS.equals(listRecords.getSchemaLocation()));
-        String resumptionToken = listRecords.getResumptionToken();
-        System.out.println("resumptionToken=" + resumptionToken);
-        assertTrue(resumptionToken.equals("!!!oai_dc!100"));
+        if (OAI11_TEST_URL != null && !OAI11_TEST_URL.isEmpty()) {
+            ListRecords listRecords = new ListRecords(OAI11_TEST_URL, null, null, null, "oai_dc");
+            assertTrue(ListRecords.SCHEMA_LOCATION_V1_1_LIST_RECORDS.equals(listRecords.getSchemaLocation()));
+            String resumptionToken = listRecords.getResumptionToken();
+            //System.out.println("resumptionToken=" + resumptionToken);
+            assertTrue(resumptionToken.equals("!!!oai_dc!100"));
+        }
     }
 
     @Test
@@ -32,7 +34,7 @@ public class ListRecordsTest {
         ListRecords listRecords = new ListRecords(OAI2_TEST_URL, null, null, null, "oai_dc");
         assertTrue(ListRecords.SCHEMA_LOCATION_V2_0.equals(listRecords.getSchemaLocation()));
         String resumptionToken = listRecords.getResumptionToken();
-        System.out.println("resumptionToken=" + resumptionToken);
-        assertTrue(resumptionToken.startsWith("metadataPrefix"));
+        //System.out.println("resumptionToken=" + resumptionToken);
+        assertTrue(resumptionToken.equals("oai_dc////100"));
     }
 }

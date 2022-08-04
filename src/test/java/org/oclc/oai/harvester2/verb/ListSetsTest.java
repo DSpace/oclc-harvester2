@@ -20,8 +20,10 @@ public class ListSetsTest {
 
     @Test
     public void test11() throws Exception {
-        ListSets listSets = new ListSets(OAI11_TEST_URL);
-        assertTrue(ListSets.SCHEMA_LOCATION_V1_1_LIST_SETS.equals(listSets.getSchemaLocation()));
+        if (OAI11_TEST_URL != null && !OAI11_TEST_URL.isEmpty()) {
+            ListSets listSets = new ListSets(OAI11_TEST_URL);
+            assertTrue(ListSets.SCHEMA_LOCATION_V1_1_LIST_SETS.equals(listSets.getSchemaLocation()));
+        }
     }
 
     @Test
