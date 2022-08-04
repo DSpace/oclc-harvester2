@@ -1,76 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.oclc.oai</groupId>
-    <artifactId>oai-harvester2</artifactId>
+    <groupId>org.dspace</groupId>
+    <artifactId>oclc-harvester2</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <prerequisites>
-        <maven>3.0</maven>
-    </prerequisites>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>OCLC OAI Harvester 2</name>
+    <description>
+        OCLC OAI Harvester 2, updated for DSpace
+    </description>
+    <url>https://github.com/DSpace/oai-harvester2</url>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <!--
+      Information about the SCM repository where source code exists.
+    -->
     <scm>
-        <connection>scm:git:https://github.com/hlavki/oaiharvester2.git</connection>
+        <connection>scm:git:git@github.com:DSpace/oai-harvester2.git</connection>
+        <developerConnection>scm:git:git@github.com:DSpace/oai-harvester2.git</developerConnection>
+        <url>git@github.com:DSpace/oai-harvester2.git</url>
+        <tag>HEAD</tag>
     </scm>
+
     <dependencies>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.36</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.7</version>
+            <version>1.7.36</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!--
+      Information about the SCM repository where source code exists.
+    -->
     <distributionManagement>
-        <repository>
-            <id>datalan-releases</id>
-            <name>Datalan's distribution repository</name>
-            <url>http://maven.datalan.sk/content/repositories/releases</url>
-        </repository>
         <snapshotRepository>
-            <id>datalan-snapshots</id>
-            <name>Datalan's snapshots repository</name>
-            <url>http://maven.datalan.sk/content/repositories/snapshots</url>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
     </distributionManagement>
+
     <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Used to generate a new release via Sonatype (see release profile). -->
+                <plugin>
+                    <groupId>org.sonatype.plugins</groupId>
+                    <artifactId>nexus-staging-maven-plugin</artifactId>
+                    <version>1.6.8</version>
+                </plugin>
+                <!-- Used to sign new releases via GPG (see release profile). -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>1.6</version>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>3.2.0</version>
+                    <configuration>
+                        <!-- Never fail a build based on Javadoc errors -->
+                        <failOnError>false</failOnError>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.2</version>
+                <version>3.8.1</version>
                 <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>UTF-8</encoding>
+                    <!-- Require Java 8 or above -->
+                    <release>8</release>
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.10.1</version>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
             <plugin>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>2.4</version>
+                <version>3.2.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -80,7 +119,144 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- Specify our settings for new releases via 'mvn release:*' -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <!-- During release:prepare and release:perform, pass the "release" property to enable the
+                     "release" profile (and enable/disable other profiles based on whether they need releasing) -->
+                    <arguments>-Drelease</arguments>
+                    <goals>deploy</goals>
+                    <!-- Suggest tagging the release in SCM as "dspace-[version]" -->
+                    <tagNameFormat>oai-harvester2-@{project.version}</tagNameFormat>
+                    <!-- Auto-Version all modules the same as the parent module -->
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!--
+         The 'release' profile is used by the 'maven-release-plugin' (see above)
+         to actually perform a DSpace software release to Maven central.
+         This profile contains settings which are ONLY enabled when performing
+         a DSpace release. See also https://wiki.lyrasis.org/display/DSPACE/Release+Procedure
+         NOTE: You MUST trigger this profile by running "-Drelease"
+         (as that flag also triggers other modules to be enabled/disabled as necessary for release)
+        -->
+        <profile>
+            <id>release</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <!-- Enable this profile if we are doing a release (-Drelease) -->
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- Configure Nexus plugin for new releases via Sonatype.
+                         See: http://central.sonatype.org/pages/apache-maven.html -->
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <!-- In your settings.xml, your username/password
+                                 MUST be specified for server 'ossrh' -->
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <!-- Disable autoclose of repository after upload, as this sometimes times out -->
+                            <skipStagingRepositoryClose>true</skipStagingRepositoryClose>
+                            <!-- Require manual verification / release to Maven Central -->
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                            <!-- Increase Staging timeout to 10mins -->
+                            <stagingProgressTimeoutMinutes>10</stagingProgressTimeoutMinutes>
+                        </configuration>
+                    </plugin>
+                    <!-- For new releases, generate Source JAR files -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- For new releases, generate JavaDocs for each module -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Sign any new releases via GPG.
+                         NOTE: you may optionall specify the "gpg.passphrase" in your settings.xml -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <developers>
+        <developer>
+            <name>DSpace Committers</name>
+            <email>dspace-devel@googlegroups.com</email>
+            <url>https://wiki.lyrasis.org/display/DSPACE/DSpace+Committers</url>
+            <roles>
+                <role>committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Ståle Andreas Sund</name>
+            <email>sasund@users.noreply.github.com</email>
+            <url>https://github.com/sasund/oai-harvester2</url>
+            <roles>
+                <role>maven-migrate-and-dependency-update</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>OCLC Research</name>
+            <email>OCLC-Research@users.noreply.github.com</email>
+            <url>https://github.com/OCLC-Research/oaiharvester2/</url>
+            <roles>
+                <role>original-developer</role>
+            </roles>
+        </developer>
+    </developers>
+
+    <!-- OCLC licensed this code under Apache 2. See header in all files. -->
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 </project>
 
